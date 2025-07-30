@@ -27,8 +27,21 @@ class DashboardController extends Controller
                 ];
             });
 
+        $balance = $user->transactions()->get()->reduce(function ($carry, $t) {
+            return $carry + ($t->type === 'income' ? $t->amount : -$t->amount);
+        }, 0);
+
+   $moneyout = $user->transactions()
+       ->where('type', 'expense')
+       ->whereMonth('date', Carbon::now()->month)
+       ->whereYear('date', Carbon::now()->year)
+       ->sum('amount');
+
+
         return Inertia::render('dashboard', [
             'recentTransactions' => $recentTransactions,
+            'balance' => (float) $balance,
+            'moneyout' => (float) $moneyout,
         ]);
     }
 }

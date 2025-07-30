@@ -24,45 +24,50 @@ const breadcrumbs: BreadcrumbItem[] = [
 export default function Dashboard() {
     const {props} = usePage();
     const recentTransactions = props.recentTransactions || [];
+    const balance = props.balance || [];
+    const moneyout = props.moneyout || [];
 
-    console.log('Transações recentes:', recentTransactions);
-    console.log('Props:', props);
     // @ts-ignore
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard" />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4 overflow-x-auto">
-                <div className="grid gap-2 md:grid-cols-3">
+                <div className="grid gap-2 md:grid-cols-2">
                     {/* Card 1 */}
                     <Card className="rounded-2xl border border-border bg-muted/40 dark:bg-muted/10 shadow-sm overflow-hidden">
                         <CardHeader>
-                            <CardDescription>Saldo</CardDescription>
+                            <CardDescription>Saldo Total</CardDescription>
                             <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-                                R$ 1.000,00
+                                {balance == 0 ? 'R$ 0,00' : balance.toLocaleString('pt-BR', {
+                                    style: 'currency',
+                                    currency: 'BRL',
+                                })}
                             </CardTitle>
                             <CardAction>
-                                <Badge variant="outline">
-                                    <TrendingUp className="w-3.5 h-3.5 text-green-500" />
-                                    +12.5%
-                                </Badge>
+                                {/*<Badge variant="outline">*/}
+                                {/*    <TrendingUp className="w-3.5 h-3.5 text-green-500" />*/}
+                                {/*    +12.5%*/}
+                                {/*</Badge>*/}
                             </CardAction>
                         </CardHeader>
                         <CardFooter className="flex-col items-start gap-1.5 text-sm">
                             <div className="line-clamp-1 flex gap-2 font-medium">
-                                Trending up this month
-                                <TrendingUp className="size-4" />
+                                Total em conta
                             </div>
                             <div className="text-muted-foreground">
-                                {/*Visitors for the last 6 months*/}
+                                Valor atualizado sempre que adicionar ou remover uma transação
                             </div>
                         </CardFooter>
                     </Card>
                     {/* Card 2 */}
                     <Card className=" rounded-2xl border border-border bg-muted/40 dark:bg-muted/10 shadow-sm overflow-hidden">
                         <CardHeader>
-                            <CardDescription>Entrada</CardDescription>
+                            <CardDescription>Saída</CardDescription>
                             <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-                                R$ 1.250,00
+                                {moneyout == 0 ? 'R$ 0,00' : moneyout.toLocaleString('pt-BR', {
+                                    style: 'currency',
+                                    currency: 'BRL',
+                                })}
                             </CardTitle>
                             <CardAction>
                                 <Badge variant="outline">
@@ -73,7 +78,7 @@ export default function Dashboard() {
                         </CardHeader>
                         <CardFooter className="flex-col items-start gap-1.5 text-sm">
                             <div className="line-clamp-1 flex gap-2 font-medium">
-                                Trending up this month
+                                Saída do mês
                                 <TrendingDown className="size-4" />
                             </div>
                             <div className="text-muted-foreground">
@@ -82,29 +87,29 @@ export default function Dashboard() {
                         </CardFooter>
                     </Card>
                     {/* Card 3 */}
-                    <Card className=" rounded-2xl border border-border bg-muted/40 dark:bg-muted/10 shadow-sm overflow-hidden">
-                        <CardHeader>
-                            <CardDescription>Saída</CardDescription>
-                            <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-                                R$ 1.250,00
-                            </CardTitle>
-                            <CardAction>
-                                <Badge variant="outline">
-                                    <TrendingDown className="w-3.5 h-3.5 text-red-500" />
-                                    -12.5%
-                                </Badge>
-                            </CardAction>
-                        </CardHeader>
-                        <CardFooter className="flex-col items-start gap-1.5 text-sm">
-                            <div className="line-clamp-1 flex gap-2 font-medium">
-                                Trending up this month
-                                <TrendingDown className="size-4" />
-                            </div>
-                            <div className="text-muted-foreground">
-                                {/*Visitors for the last 6 months*/}
-                            </div>
-                        </CardFooter>
-                    </Card>
+                    {/*<Card className=" rounded-2xl border border-border bg-muted/40 dark:bg-muted/10 shadow-sm overflow-hidden">*/}
+                    {/*    <CardHeader>*/}
+                    {/*        <CardDescription>Saída</CardDescription>*/}
+                    {/*        <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">*/}
+                    {/*            R$ 1.250,00*/}
+                    {/*        </CardTitle>*/}
+                    {/*        <CardAction>*/}
+                    {/*            <Badge variant="outline">*/}
+                    {/*                <TrendingDown className="w-3.5 h-3.5 text-red-500" />*/}
+                    {/*                -12.5%*/}
+                    {/*            </Badge>*/}
+                    {/*        </CardAction>*/}
+                    {/*    </CardHeader>*/}
+                    {/*    <CardFooter className="flex-col items-start gap-1.5 text-sm">*/}
+                    {/*        <div className="line-clamp-1 flex gap-2 font-medium">*/}
+                    {/*            Trending up this month*/}
+                    {/*            <TrendingDown className="size-4" />*/}
+                    {/*        </div>*/}
+                    {/*        <div className="text-muted-foreground">*/}
+                    {/*            /!*Visitors for the last 6 months*!/*/}
+                    {/*        </div>*/}
+                    {/*    </CardFooter>*/}
+                    {/*</Card>*/}
                 </div>
                 <div className="relative min-h-[100vh] flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
                     <Card className="lg:col-span-2">
@@ -132,9 +137,9 @@ export default function Dashboard() {
                                             <TableCell>
                                                 <Badge variant="secondary">{transaction.category ?? 'Sem categoria'}</Badge>
                                             </TableCell>
-                                            <TableCell className="text-gray-500">
-                                                {new Date(transaction.date).toLocaleDateString("pt-BR")}
-                                            </TableCell>
+                                               <TableCell className="text-gray-500">
+                                                {new Date(transaction.date).toLocaleDateString("pt-BR", { timeZone: "UTC" })}
+                                               </TableCell>
                                             <TableCell
                                                 className={`text-right font-medium ${
                                                     transaction.type === "income" ? "text-green-600" : "text-red-600"
