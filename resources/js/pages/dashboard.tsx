@@ -6,6 +6,7 @@ import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, usePage } from '@inertiajs/react';
 import { TrendingDown } from 'lucide-react';
+import { PaginationWrapper } from '@/components/mycomponents/pagination';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -44,9 +45,6 @@ export default function Dashboard() {
     const { data: recentTransactions, links } = props.recentTransactions;
     const balance = props.balance || [];
     const moneyout = props.moneyout || [];
-
-
-
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
@@ -173,24 +171,9 @@ export default function Dashboard() {
                                         </TableRow>
                                     ))}
                                 </TableBody>
-                                <div className="flex justify-center gap-2 mt-4">
-                                    {links.map((link, index) => (
-                                        <button
-                                            key={index}
-                                            disabled={!link.url}
-                                            className={`px-3 py-1 rounded text-sm ${
-                                                link.active ? 'bg-primary text-white' : 'bg-muted text-muted-foreground'
-                                            }`}
-                                            dangerouslySetInnerHTML={{ __html: link.label }}
-                                            onClick={() => {
-                                                if (link.url) {
-                                                    window.location.href = link.url;
-                                                }
-                                            }}
-                                        />
-                                    ))}
-                                </div>
+
                             </Table>
+                            <PaginationWrapper links={links} />
                         </CardContent>
                     </Card>
                 </div>
