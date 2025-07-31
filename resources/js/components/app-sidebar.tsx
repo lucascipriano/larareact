@@ -15,7 +15,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Status',
-        href: '/dashboard',
+        href: '/random',
         icon: Plus,
     },
 ];

@@ -1,12 +1,11 @@
 import SheetDemo from '@/components/mycomponents/side-sheets';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, usePage } from '@inertiajs/react';
 import { TrendingDown } from 'lucide-react';
-import { PaginationWrapper } from '@/components/mycomponents/pagination';
+import { TableWrapper } from '@/components/mycomponents/table';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -34,7 +33,7 @@ type Paginated<T> = {
     last_page: number;
 };
 
-export default function Dashboard() {
+export default  function Dashboard(){
 
     const { props } = usePage<{
         recentTransactions: Paginated<Transaction>;
@@ -139,41 +138,7 @@ export default function Dashboard() {
                             <SheetDemo />
                         </CardHeader>
                         <CardContent>
-                            <Table>
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead>Descrição</TableHead>
-                                        <TableHead>Categoria</TableHead>
-                                        <TableHead>Data</TableHead>
-                                        <TableHead className="text-right">Valor</TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {recentTransactions.map((transaction) => (
-                                        <TableRow key={transaction.id}>
-                                            <TableCell className="font-medium">{transaction.description}</TableCell>
-                                            <TableCell>
-                                                <Badge variant="secondary">{transaction.category ?? 'Sem categoria'}</Badge>
-                                            </TableCell>
-                                            <TableCell className="text-gray-500">
-                                                {new Date(transaction.date).toLocaleDateString('pt-BR', { timeZone: 'UTC' })}
-                                            </TableCell>
-                                            <TableCell
-                                                className={`text-right font-medium ${
-                                                    transaction.type === 'income' ? 'text-green-600' : 'text-red-600'
-                                                }`}
-                                            >
-                                                {transaction.type === 'income' ? '+' : '-'} R${' '}
-                                                {Math.abs(transaction.amount).toLocaleString('pt-BR', {
-                                                    minimumFractionDigits: 2,
-                                                })}
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-
-                            </Table>
-                            <PaginationWrapper links={links} />
+                            <TableWrapper recentTransactions={recentTransactions} links={links} />
                         </CardContent>
                     </Card>
                 </div>
