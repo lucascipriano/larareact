@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\FixedExpense;
 use App\Models\Transaction;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -25,6 +26,11 @@ class DatabaseSeeder extends Seeder
 
         User::all()->each(function ($user) {
             Transaction::factory()->count(50)->create([
+                'user_id' => $user->id,
+            ]);
+        });
+        User::all()->each(function ($user) {
+            FixedExpense::factory()->count(10)->create([
                 'user_id' => $user->id,
             ]);
         });

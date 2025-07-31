@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\FixedExpense;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -36,11 +37,15 @@ class DashboardController extends Controller
        ->whereYear('date', Carbon::now()->year)
        ->sum('amount');
 
+        $totalFixed = FixedExpense::where('user_id', $user->id)
+            ->where('is_active', true)
+            ->sum('amount');
 
         return Inertia::render('dashboard', [
             'recentTransactions' => $recentTransactions,
             'balance' => (float) $balance,
             'moneyout' => (float) $moneyout,
+            'totalFixed' => $totalFixed,
         ]);
     }
 

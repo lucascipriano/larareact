@@ -44,6 +44,7 @@ export default  function Dashboard(){
     const { data: recentTransactions, links } = props.recentTransactions;
     const balance = props.balance || [];
     const moneyout = props.moneyout || [];
+    const totalFixed = props.totalFixed || [];
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
@@ -51,12 +52,12 @@ export default  function Dashboard(){
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard" />
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
-                <div className="grid gap-2 md:grid-cols-2">
+                <div className="grid gap-2 md:grid-cols-3">
                     {/* Card 1 */}
                     <Card className="overflow-hidden rounded-2xl border border-border bg-muted/40 shadow-sm dark:bg-muted/10">
                         <CardHeader>
                             <CardDescription>Saldo Total</CardDescription>
-                            <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
+                            <CardTitle className="text-2xl text-green-500 font-semibold tabular-nums @[250px]/card:text-3xl">
                                 {balance == 0
                                     ? 'R$ 0,00'
                                     : Number(balance).toLocaleString('pt-BR', {
@@ -80,7 +81,7 @@ export default  function Dashboard(){
                     <Card className="overflow-hidden rounded-2xl border border-border bg-muted/40 shadow-sm dark:bg-muted/10">
                         <CardHeader>
                             <CardDescription>Saída</CardDescription>
-                            <CardTitle className="text-red- text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
+                            <CardTitle className="text-red-500 text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
                                 {moneyout == 0
                                     ? 'R$ 0,00'
                                     : Number(moneyout).toLocaleString('pt-BR', {
@@ -103,30 +104,35 @@ export default  function Dashboard(){
                             <div className="text-muted-foreground">{/*Visitors for the last 6 months*/}</div>
                         </CardFooter>
                     </Card>
-                    {/* Card 3 */}
-                    {/*<Card className=" rounded-2xl border border-border bg-muted/40 dark:bg-muted/10 shadow-sm overflow-hidden">*/}
-                    {/*    <CardHeader>*/}
-                    {/*        <CardDescription>Saída</CardDescription>*/}
-                    {/*        <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">*/}
-                    {/*            R$ 1.250,00*/}
-                    {/*        </CardTitle>*/}
-                    {/*        <CardAction>*/}
-                    {/*            <Badge variant="outline">*/}
-                    {/*                <TrendingDown className="w-3.5 h-3.5 text-red-500" />*/}
-                    {/*                -12.5%*/}
-                    {/*            </Badge>*/}
-                    {/*        </CardAction>*/}
-                    {/*    </CardHeader>*/}
-                    {/*    <CardFooter className="flex-col items-start gap-1.5 text-sm">*/}
-                    {/*        <div className="line-clamp-1 flex gap-2 font-medium">*/}
-                    {/*            Trending up this month*/}
-                    {/*            <TrendingDown className="size-4" />*/}
-                    {/*        </div>*/}
-                    {/*        <div className="text-muted-foreground">*/}
-                    {/*            /!*Visitors for the last 6 months*!/*/}
-                    {/*        </div>*/}
-                    {/*    </CardFooter>*/}
-                    {/*</Card>*/}
+                     {/*Card 3*/}
+                    <Card className=" rounded-2xl border border-border bg-muted/40 dark:bg-muted/10 shadow-sm overflow-hidden">
+                        <CardHeader>
+                            <CardDescription>Gastos fixos</CardDescription>
+                            <CardTitle className="text-2xl text-yellow-500 font-semibold tabular-nums @[250px]/card:text-3xl">
+                                {totalFixed == 0
+                                    ? 'R$ 0,00'
+                                    : Number(totalFixed).toLocaleString('pt-BR', {
+                                        style: 'currency',
+                                        currency: 'BRL',
+                                    })}
+                            </CardTitle>
+                            <CardAction>
+                                <Badge variant="outline">
+                                    <TrendingDown className="w-3.5 h-3.5 text-red-500" />
+                                    -12.5%
+                                </Badge>
+                            </CardAction>
+                        </CardHeader>
+                        <CardFooter className="flex-col items-start gap-1.5 text-sm">
+                            <div className="line-clamp-1 flex gap-2 font-medium">
+                                Trending up this month
+                                <TrendingDown className="size-4" />
+                            </div>
+                            <div className="text-muted-foreground">
+                                {/*Visitors for the last 6 months*/}
+                            </div>
+                        </CardFooter>
+                    </Card>
                 </div>
                 <div className="relative min-h-[100vh] flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
                     <Card className="lg:col-span-2">
