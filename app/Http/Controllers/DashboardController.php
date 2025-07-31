@@ -43,4 +43,12 @@ class DashboardController extends Controller
             'moneyout' => (float) $moneyout,
         ]);
     }
+
+    public function destroy($id)
+    {
+        $user = Auth::user();
+        $transaction = $user->transactions()->findOrFail($id);
+        $transaction->delete();
+        return redirect()->back()->with('success', 'Transaction deleted successfully.');
+    }
 }

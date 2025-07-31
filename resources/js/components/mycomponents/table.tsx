@@ -21,6 +21,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/badge'
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { PaginationWrapper } from '@/components/mycomponents/pagination'
+import { Inertia } from '@inertiajs/inertia'
+import { toast } from "sonner"
 
 type Transaction = {
     id: number
@@ -45,6 +47,20 @@ export function TableWrapper({ recentTransactions, links }: TableWrapperProps) {
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
     const [rowSelection, setRowSelection] = React.useState({})
+
+    function handleEdit(transaction: Transaction) {
+        // Lógica para editar (abrir modal, navegar, etc)
+        toast(`Editar transação: ${transaction.id}`)
+    }
+
+    function handleDelete(id: number) {
+        Inertia.delete(`/transactions/${id}`, {
+            onSuccess: () => {
+                toast("Deletado com sucesso!");
+                Inertia.reload();
+                },
+        })
+    }
 
     const columns: ColumnDef<Transaction>[] = [
         {
@@ -71,7 +87,15 @@ export function TableWrapper({ recentTransactions, links }: TableWrapperProps) {
         },
         {
             accessorKey: 'date',
-            header: 'Data',
+            header: ({ column }) => (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+                >
+                    Data
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            ),
             cell: ({ row }) =>
                 new Date(row.original.date).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
         },
@@ -95,6 +119,32 @@ export function TableWrapper({ recentTransactions, links }: TableWrapperProps) {
                 )
             },
         },
+        {
+            id: 'actions',
+            cell: ({ row }) => (
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button size="sm" variant="ghost">
+                            ...
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                        <DropdownMenuCheckboxItem
+                            onClick={() => handleEdit(row.original)}
+                        >
+                            Editar
+                        </DropdownMenuCheckboxItem>
+                        <DropdownMenuCheckboxItem
+                            onClick={() => handleDelete(row.original.id)}
+                        >
+                            Excluir
+                        </DropdownMenuCheckboxItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            ),
+            enableSorting: false,
+            enableHiding: false,
+        }
     ]
 
     const table = useReactTable({

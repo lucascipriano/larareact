@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Transaction;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Database\Factories\TransactionFactory;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -21,5 +23,10 @@ class DatabaseSeeder extends Seeder
 
          User::factory(10)->create();
 
+        User::all()->each(function ($user) {
+            Transaction::factory()->count(50)->create([
+                'user_id' => $user->id,
+            ]);
+        });
     }
 }
