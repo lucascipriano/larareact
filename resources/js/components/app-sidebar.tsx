@@ -4,7 +4,7 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { BookOpen, LayoutGrid, Plus } from 'lucide-react';
+import { BookOpen, DollarSign, LayoutGrid, Pin } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
@@ -14,9 +14,13 @@ const mainNavItems: NavItem[] = [
         icon: LayoutGrid,
     },
     {
-        title: 'Status',
-        href: '/random',
-        icon: Plus,
+        title: 'Gastos fixos',
+        href: '/fixeds',
+        icon: Pin,
+    }, {
+        title: 'Total de gastos',
+        href: '/total',
+        icon: DollarSign,
     },
 ];
 
