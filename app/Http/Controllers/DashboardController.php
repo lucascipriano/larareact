@@ -14,9 +14,8 @@ class DashboardController extends Controller
 
         $recentTransactions = $user->transactions()
             ->latest()
-            ->take(10)
-            ->get()
-            ->map(function ($t) {
+            ->paginate(10)
+            ->through(function ($t) {
                 return [
                     'id' => $t->id,
                     'description' => $t->description,

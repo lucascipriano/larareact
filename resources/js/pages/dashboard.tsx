@@ -22,10 +22,26 @@ type Transaction = {
     amount: number;
 };
 
+type Paginated<T> = {
+    data: T[];
+    links: {
+        url: string | null;
+        label: string;
+        active: boolean;
+    }[];
+    current_page: number;
+    last_page: number;
+};
+
 export default function Dashboard() {
 
-    const { props } = usePage<{ recentTransactions: Transaction[]; balance: number; moneyout: number }>();
-    const recentTransactions = props.recentTransactions || [];
+    const { props } = usePage<{
+        recentTransactions: Paginated<Transaction>;
+        balance: number;
+        moneyout: number;
+    }>();
+
+    const { data: recentTransactions, links } = props.recentTransactions;
     const balance = props.balance || [];
     const moneyout = props.moneyout || [];
 
@@ -157,6 +173,23 @@ export default function Dashboard() {
                                         </TableRow>
                                     ))}
                                 </TableBody>
+                                <div className="flex justify-center gap-2 mt-4">
+                                    {links.map((link, index) => (
+                                        <button
+                                            key={index}
+                                            disabled={!link.url}
+                                            className={`px-3 py-1 rounded text-sm ${
+                                                link.active ? 'bg-primary text-white' : 'bg-muted text-muted-foreground'
+                                            }`}
+                                            dangerouslySetInnerHTML={{ __html: link.label }}
+                                            onClick={() => {
+                                                if (link.url) {
+                                                    window.location.href = link.url;
+                                                }
+                                            }}
+                                        />
+                                    ))}
+                                </div>
                             </Table>
                         </CardContent>
                     </Card>
