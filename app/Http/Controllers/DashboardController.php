@@ -46,6 +46,8 @@ class DashboardController extends Controller
             'balance' => (float) $balance,
             'moneyout' => (float) $moneyout,
             'totalFixed' => $totalFixed,
+            'links' => $recentTransactions->toArray()['links'], // se estiver paginando
+            'success' => session('success')
         ]);
     }
 
@@ -54,6 +56,7 @@ class DashboardController extends Controller
         $user = Auth::user();
         $transaction = $user->transactions()->findOrFail($id);
         $transaction->delete();
-        return redirect()->back()->with('success', 'Transaction deleted successfully.');
+        return redirect()->back()->with('success', 'Transação criada com sucesso!');
     }
+
 }

@@ -23,6 +23,8 @@ import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMe
 import { PaginationWrapper } from '@/components/mycomponents/pagination'
 import { Inertia } from '@inertiajs/inertia'
 import { toast } from "sonner"
+import { router, usePage } from '@inertiajs/react';
+import { useEffect } from 'react';
 
 type Transaction = {
     id: number
@@ -47,21 +49,31 @@ export function TableWrapper({ recentTransactions, links }: TableWrapperProps) {
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
     const [rowSelection, setRowSelection] = React.useState({})
-
+    const { props } = usePage();
+    useEffect(() => {
+        if (typeof props.success === 'string') {
+            toast.success(props.success)
+        }
+    }, [props.success]);
     function handleEdit(transaction: Transaction) {
         // Lógica para editar (abrir modal, navegar, etc)
         toast(`Editar transação: ${transaction.id}`)
     }
 
-    function handleDelete(id: number) {
-        Inertia.delete(`/transactions/${id}`, {
+    async function handleDelete(id: number) {
+        toast.success('Transação deletada com sucesso!')
+        router.delete(`/transactions/${id}`,{
             onSuccess: () => {
-                toast("Deletado com sucesso!");
-                Inertia.reload();
-                },
-        })
-    }
+                // Inertia.reload({ preserveScroll: true });
+            },
+            onError: (error) => {
+                toast.error(`Erro ao deletar transação: ${error.message}`);
+            },
+            preserveScroll: true,
+            headers: { 'X-Inertia': 'false' },
+        });
 
+    }
     const columns: ColumnDef<Transaction>[] = [
         {
             accessorKey: 'description',
