@@ -21,7 +21,6 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/badge'
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { PaginationWrapper } from '@/components/mycomponents/pagination'
-import { Inertia } from '@inertiajs/inertia'
 import { toast } from "sonner"
 import { router, usePage } from '@inertiajs/react';
 import { useEffect } from 'react';
@@ -61,16 +60,14 @@ export function TableWrapper({ recentTransactions, links }: TableWrapperProps) {
     }
 
     async function handleDelete(id: number) {
-        toast.success('Transação deletada com sucesso!')
         router.delete(`/transactions/${id}`,{
             onSuccess: () => {
-                // Inertia.reload({ preserveScroll: true });
+                toast('Transação deletada com sucesso!');
             },
             onError: (error) => {
                 toast.error(`Erro ao deletar transação: ${error.message}`);
             },
             preserveScroll: true,
-            headers: { 'X-Inertia': 'false' },
         });
 
     }

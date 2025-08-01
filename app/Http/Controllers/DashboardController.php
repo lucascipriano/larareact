@@ -56,7 +56,7 @@ class DashboardController extends Controller
         $user = Auth::user();
         $transaction = $user->transactions()->findOrFail($id);
         $transaction->delete();
-        return redirect()->back()->with('success', 'Transação criada com sucesso!');
+        return redirect()->back();
     }
 
 }

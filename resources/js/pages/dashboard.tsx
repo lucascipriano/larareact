@@ -57,7 +57,7 @@ export default  function Dashboard(){
                     <Card className="overflow-hidden rounded-2xl border border-border bg-muted/40 shadow-sm dark:bg-muted/10">
                         <CardHeader>
                             <CardDescription>Saldo Total</CardDescription>
-                            <CardTitle className="text-2xl text-green-500 font-semibold tabular-nums @[250px]/card:text-3xl">
+                            <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
                                 {balance == 0
                                     ? 'R$ 0,00'
                                     : Number(balance).toLocaleString('pt-BR', {
