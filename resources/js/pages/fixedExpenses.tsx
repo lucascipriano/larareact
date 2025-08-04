@@ -1,6 +1,9 @@
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
+import { Card, CardAction, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { TrendingDown } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -37,22 +40,69 @@ export default function FixedExpenses({ fixedExpenses = [] }: Props) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Fixed Expenses" />
-            <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
-                <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-                    <div className="rounded-xl border p-4">
-                        <h3 className="text-lg font-semibold">Total de Despesas</h3>
-                        <p className="text-2xl font-bold">{fixedExpenses.length}</p>
-                    </div>
-                    <div className="rounded-xl border p-4">
-                        <h3 className="text-lg font-semibold">Valor Total</h3>
-                        <p className="text-2xl font-bold">
-                            R$ {totalAmount.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
-                        </p>
-                    </div>
-                    <div className="rounded-xl border p-4">
-                        <h3 className="text-lg font-semibold">Despesas Ativas</h3>
-                        <p className="text-2xl font-bold">{activeExpenses.length}</p>
-                    </div>
+            <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
+                <div className="grid gap-2 md:grid-cols-3">
+                    {/*card 1*/}
+                    <Card className="overflow-hidden rounded-2xl border border-border bg-muted/40 shadow-sm dark:bg-muted/10">
+                        <CardHeader>
+                            <CardDescription>Total de Despesas</CardDescription>
+                            <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
+                                {fixedExpenses.length}
+                            </CardTitle>
+                            <CardAction>
+                                {/*<Badge variant="outline">*/}
+                                {/*    <TrendingUp className="w-3.5 h-3.5 text-green-500" />*/}
+                                {/*    +12.5%*/}
+                                {/*</Badge>*/}
+                            </CardAction>
+                        </CardHeader>
+                        <CardFooter className="flex-col items-start gap-1.5 text-sm">
+                            <div className="line-clamp-1 flex gap-2 font-medium">Total em conta</div>
+                            <div className="text-muted-foreground">Valor atualizado sempre que adicionar ou remover uma transação</div>
+                        </CardFooter>
+                    </Card>
+                    {/*Card 2*/}
+                    <Card className="overflow-hidden rounded-2xl border border-border bg-muted/40 shadow-sm dark:bg-muted/10">
+                        <CardHeader>
+                            <CardDescription>Valor total</CardDescription>
+                            <CardTitle className="text-red-500 text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
+                                R$ {totalAmount.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                            </CardTitle>
+
+                        </CardHeader>
+                        <CardFooter className="flex-col items-start gap-1.5 text-sm">
+                            <div className="line-clamp-1 flex gap-2 font-medium">
+                                {/*Saída do mês*/}
+                            </div>
+                            <div className="text-muted-foreground">{/*Visitors for the last 6 months*/}</div>
+                        </CardFooter>
+                    </Card>
+
+                    {/*Card 3*/}
+
+                    <Card className=" rounded-2xl border border-border bg-muted/40 dark:bg-muted/10 shadow-sm overflow-hidden">
+                        <CardHeader>
+                            <CardDescription>Despesas ativas</CardDescription>
+                            <CardTitle className="text-2xl text-yellow-500 font-semibold tabular-nums @[250px]/card:text-3xl">
+                                {activeExpenses?.length}
+                            </CardTitle>
+                            <CardAction>
+                                <Badge variant="outline">
+                                    <TrendingDown className="w-3.5 h-3.5 text-red-500" />
+                                    -12.5%
+                                </Badge>
+                            </CardAction>
+                        </CardHeader>
+                        <CardFooter className="flex-col items-start gap-1.5 text-sm">
+                            <div className="line-clamp-1 flex gap-2 font-medium">
+                                Trending up this month
+                                <TrendingDown className="size-4" />
+                            </div>
+                            <div className="text-muted-foreground">
+                                {/*Visitors for the last 6 months*/}
+                            </div>
+                        </CardFooter>
+                    </Card>
                 </div>
 
                 <div className="rounded-xl border p-4">
