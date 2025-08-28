@@ -18,20 +18,22 @@ import { ArrowUpDown, ChevronDown } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { Badge } from '@/components/ui/badge'
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { PaginationWrapper } from '@/components/mycomponents/pagination'
 import { toast } from "sonner"
 import { router, usePage } from '@inertiajs/react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import SheetTransaction from './side-sheets'
+import Transaction from './side-sheets'
 
-type Transaction = {
+// Defina a interface Transaction conforme os campos usados no componente
+interface Transaction {
     id: number
-    description: string
     category?: string
+    description?: string
     date: string
-    type: 'income' | 'expense'
     amount: number
+    type: 'income' | 'expense'
 }
 
 type TableWrapperProps = {
@@ -48,15 +50,19 @@ export function TableWrapper({ recentTransactions, links }: TableWrapperProps) {
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
     const [rowSelection, setRowSelection] = React.useState({})
+    const [editingTransaction, setEditingTransaction] = useState<Transaction | undefined>(undefined)
+    const [sheetOpen, setSheetOpen] = useState(false)
+
     const { props } = usePage();
     useEffect(() => {
         if (typeof props.success === 'string') {
             toast.success(props.success)
         }
     }, [props.success]);
+
     function handleEdit(transaction: Transaction) {
-        // Lógica para editar (abrir modal, navegar, etc)
-        toast(`Editar transação: ${transaction.id}`)
+        setEditingTransaction(transaction)
+        setSheetOpen(true)
     }
 
     async function handleDelete(id: number) {
@@ -69,10 +75,16 @@ export function TableWrapper({ recentTransactions, links }: TableWrapperProps) {
             },
             preserveScroll: true,
         });
-
     }
+
     const columns: ColumnDef<Transaction>[] = [
         {
+            accessorKey: 'category',
+            header: 'Categoria',
+            cell: ({ row }) => (
+                <>{row.original.category || 'Sem categoria'}</>
+            ),
+        },{
             accessorKey: 'description',
             header: ({ column }) => (
                 <Button
@@ -83,16 +95,7 @@ export function TableWrapper({ recentTransactions, links }: TableWrapperProps) {
                     <ArrowUpDown className="ml-2 h-4 w-4" />
                 </Button>
             ),
-            cell: ({ row }) => <span className="font-medium">{row.getValue('description')}</span>,
-        },
-        {
-            accessorKey: 'category',
-            header: 'Categoria',
-            cell: ({ row }) => (
-                <Badge variant="secondary">
-                    {row.original.category || 'Sem categoria'}
-                </Badge>
-            ),
+            cell: ({ row }) => <span className="font-medium">{row.getValue('description') || "Sem descrição"}</span>,
         },
         {
             accessorKey: 'date',
@@ -119,8 +122,7 @@ export function TableWrapper({ recentTransactions, links }: TableWrapperProps) {
                 })
                 return (
                     <div
-                        className={`text-right font-medium ${type === 'income' ? 'text-green-600' : 'text-red-600'
-                            }`}
+                        className={`text-right font-medium ${type === 'income' ? 'text-green-600' : 'text-red-600'}`}
                     >
                         {type === 'income' ? '+' : '-'} {formatted}
                     </div>
@@ -132,9 +134,7 @@ export function TableWrapper({ recentTransactions, links }: TableWrapperProps) {
             cell: ({ row }) => (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button size="sm" variant="ghost">
-                            ...
-                        </Button>
+                        <Button size="sm" variant="ghost">...</Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                         <DropdownMenuCheckboxItem
@@ -176,6 +176,9 @@ export function TableWrapper({ recentTransactions, links }: TableWrapperProps) {
 
     return (
         <div className="w-full">
+            {/* Sheet para criar/editar */}
+            <SheetTransaction transaction={editingTransaction} />
+
             <div className="flex items-center py-4">
                 <Input
                     placeholder="Filtrar por descrição..."

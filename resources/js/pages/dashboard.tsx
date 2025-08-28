@@ -1,4 +1,3 @@
-import SheetDemo from '@/components/mycomponents/side-sheets';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
@@ -6,6 +5,7 @@ import { type BreadcrumbItem } from '@/types';
 import { Head, usePage } from '@inertiajs/react';
 import { TrendingDown } from 'lucide-react';
 import { TableWrapper } from '@/components/mycomponents/table';
+import SheetTransaction from '@/components/mycomponents/side-sheets';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -33,7 +33,7 @@ type Paginated<T> = {
     last_page: number;
 };
 
-export default  function Dashboard(){
+export default function Dashboard() {
 
     const { props } = usePage<{
         recentTransactions: Paginated<Transaction>;
@@ -61,9 +61,9 @@ export default  function Dashboard(){
                                 {balance == 0
                                     ? 'R$ 0,00'
                                     : Number(balance).toLocaleString('pt-BR', {
-                                          style: 'currency',
-                                          currency: 'BRL',
-                                      })}
+                                        style: 'currency',
+                                        currency: 'BRL',
+                                    })}
                             </CardTitle>
                             <CardAction>
                                 {/*<Badge variant="outline">*/}
@@ -85,9 +85,9 @@ export default  function Dashboard(){
                                 {moneyout == 0
                                     ? 'R$ 0,00'
                                     : Number(moneyout).toLocaleString('pt-BR', {
-                                          style: 'currency',
-                                          currency: 'BRL',
-                                      })}
+                                        style: 'currency',
+                                        currency: 'BRL',
+                                    })}
                             </CardTitle>
                             <CardAction>
                                 <Badge variant="outline">
@@ -104,7 +104,7 @@ export default  function Dashboard(){
                             <div className="text-muted-foreground">{/*Visitors for the last 6 months*/}</div>
                         </CardFooter>
                     </Card>
-                     {/*Card 3*/}
+                    {/*Card 3*/}
                     <Card className=" rounded-2xl border border-border bg-muted/40 dark:bg-muted/10 shadow-sm overflow-hidden">
                         <CardHeader>
                             <CardDescription>Gastos fixos</CardDescription>
@@ -141,7 +141,7 @@ export default  function Dashboard(){
                                 <CardTitle>Transações Recentes</CardTitle>
                                 <CardDescription>Suas últimas movimentações financeiras</CardDescription>
                             </div>
-                            <SheetDemo />
+                            <SheetTransaction />
                         </CardHeader>
                         <CardContent>
                             <TableWrapper recentTransactions={recentTransactions} links={links} />

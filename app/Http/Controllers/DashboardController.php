@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\FixedExpense;
+use App\Models\Transaction;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class DashboardController extends Controller
@@ -59,4 +61,10 @@ class DashboardController extends Controller
         return redirect()->back();
     }
 
+    public function update(Request $request, $id)
+    {
+        $transaction = Transaction::findOrFail($id);
+        $transaction->update($request->all());
+        return redirect()->back()->with('success', 'Transação atualizada!');
+    }
 }
