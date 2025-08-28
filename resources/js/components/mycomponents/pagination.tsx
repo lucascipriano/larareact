@@ -1,3 +1,4 @@
+import { router } from "@inertiajs/react";
 import {
     Pagination,
     PaginationContent,
@@ -6,7 +7,7 @@ import {
     PaginationLink,
     PaginationNext,
     PaginationPrevious,
-} from "@/components/ui/pagination"
+} from "@/components/ui/pagination";
 
 type Link = {
     url: string | null;
@@ -25,6 +26,13 @@ export function PaginationWrapper({ links }: PaginationWrapperProps) {
         return label;
     };
 
+    const handleClick = (e: React.MouseEvent, url: string | null) => {
+        e.preventDefault(); // evita reload completo
+        if (url) {
+            router.get(url, {}, { preserveState: true, preserveScroll: true });
+        }
+    };
+
     return (
         <div className="flex justify-end mt-4">
             <Pagination>
@@ -39,6 +47,7 @@ export function PaginationWrapper({ links }: PaginationWrapperProps) {
                                     <PaginationPrevious
                                         href={link.url || "#"}
                                         className={!link.url ? "opacity-50 pointer-events-none" : ""}
+                                        onClick={(e) => handleClick(e, link.url)}
                                     />
                                 </PaginationItem>
                             );
@@ -50,6 +59,7 @@ export function PaginationWrapper({ links }: PaginationWrapperProps) {
                                     <PaginationNext
                                         href={link.url || "#"}
                                         className={!link.url ? "opacity-50 pointer-events-none" : ""}
+                                        onClick={(e) => handleClick(e, link.url)}
                                     />
                                 </PaginationItem>
                             );
@@ -69,6 +79,7 @@ export function PaginationWrapper({ links }: PaginationWrapperProps) {
                                     href={link.url || "#"}
                                     isActive={link.active}
                                     className={!link.url ? "opacity-50 pointer-events-none" : ""}
+                                    onClick={(e) => handleClick(e, link.url)}
                                 >
                                     {getLabel(link.label)}
                                 </PaginationLink>

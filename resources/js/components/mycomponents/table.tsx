@@ -60,7 +60,7 @@ export function TableWrapper({ recentTransactions, links }: TableWrapperProps) {
     }
 
     async function handleDelete(id: number) {
-        router.delete(`/transactions/${id}`,{
+        router.delete(`/transactions/${id}`, {
             onSuccess: () => {
                 toast('Transação deletada com sucesso!');
             },
@@ -119,9 +119,8 @@ export function TableWrapper({ recentTransactions, links }: TableWrapperProps) {
                 })
                 return (
                     <div
-                        className={`text-right font-medium ${
-                            type === 'income' ? 'text-green-600' : 'text-red-600'
-                        }`}
+                        className={`text-right font-medium ${type === 'income' ? 'text-green-600' : 'text-red-600'
+                            }`}
                     >
                         {type === 'income' ? '+' : '-'} {formatted}
                     </div>
